@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style1.css">
+    <title></title>
+</head>
+
+<body class="bg-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto calculate-form">
+                <div class="card card-body text-center mt-5">
+                    <h1 class="heading display-5 pb-3">Loan Calculator</h1>
+                    <div>
+                        <!-- calendar-->
+                        <form>
+                            <h2>Start Date</h2>
+                            <label for="date">
+                                Date:
+                                <input id="datepicker" size="15" name="date" required />
+
+                                <link class="calendar" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" rel="Stylesheet"
+                                      type="text/css" />
+
+                                <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+                                <script type="text/javascript" src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+                                <script language="javascript">
+                                    // define variable with the holidays
+                                    var holidayList = [
+                                        [1, 1, 2023],
+                                        [1, 16, 2023],
+                                        [2, 20, 2023],
+                                        [4, 29, 2023],
+                                        [6, 19, 2023],
+                                        [7, 4, 2023],
+                                        [9, 4, 2023],
+                                        [10, 9, 2023],
+                                        [11, 11, 2023],
+                                        [11, 23, 2023],
+                                        [12, 25, 2023]
+                                    ];
+
+                                    // determine what days to disable from the calendar
+                                    $(function () {
+                                        $("#datepicker").datepicker({
+                                            beforeShowDay: disabledDays,
+                                            minDate: 0
+                                        });
+                                    });
+
+                                    // determine if the day is a weekend
+                                    function disabledDays(date) {
+                                        var noSatSun = $.datepicker.noWeekends(date);
+                                        if (noSatSun[0]) {
+                                            return getHolidays(date);
+                                        }
+                                        else {
+                                            return noSatSun;
+                                        }
+                                    }
+
+                                    // get the holiday to disable
+                                    function getHolidays(date) {
+                                        var m = date.getMonth();
+                                        var d = date.getDate();
+                                        var y = date.getFullYear();
+
+                                        for (i = 0; i < holidayList.length; i++) {
+                                            if ((m == holidayList[i][0] - 1) && (d == holidayList[i][1]) && (y == holidayList[i][2])) {
+                                                return [false];
+                                            }
+                                        }
+                                        return [true];
+                                    }
+                                </script>                                
+                            </label>
+                        </form>
+                    </div><br />
+
+                    <!--Enter user inputs-->
+                    <form id="loan-form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div><label for="amountloan">
+                                    <input type="number" class="form-control"
+                                           id="amount" placeholder="Loan Amount" name="amountloan" required />
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">%</span>
+                                </div><label for="porcentagem">
+                                    <input type="number" class="form-control"
+                                           id="interest-rate" placeholder="Interest Rate" name="porcentagem" required />
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="insamount">
+                                <input type="number" id="paymentSize" class="form-control"
+                                       placeholder="Installment Amount" name="insamount" required />
+                            </label>
+                        </div>
+
+                        <!--drop down selection for payment interval-->
+                        <div class="form-group">
+                            <label for="abc">Payment Schedule:</label><br>
+                            <select id="interval" name="interval">
+                                <option value="monthly">Monthly</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="daily">Daily</option>
+                            </select>
+                        </div>
+
+                        <!--Calculate button-->
+                        <div class="button-area">
+                            <button type="submit">Calculate</button>
+                        </div>
+                    </form>
+                    <!-- Loader Here -->
+                    <div id="loading">
+                        <img src="https://media.giphy.com/media/jAYUbVXgESSti/giphy.gif"
+                             alt="" />
+                    </div>                   
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--outputs-->
+    <div id="result">
+      <h5>Results</h5>
+        <!-- table -->
+        <div class="form-group">
+            <table style="width:50%" class="table">
+                <tr>
+                    <th>Payments</th>
+                    <th>Payment Amount $</th>
+                    <th>Total amount $</th>
+                </tr>
+            </table>
+        </div>
+
+        <!--Calculated results-->
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <h5><span class="input-group-text">Total Interest</span></h5>
+                </div>
+                <input type="number"
+                       class="form-control"
+                       id="total-interest"
+                       disabled />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <h5><span class="input-group-text">Total Payment</span></h5>
+                </div>
+                <input type="number"
+                       class="form-control"
+                       id="total-payment"
+                       disabled />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <h5><span class="input-group-text">Number of Payments</span></h5>
+                </div>
+                <input type="number"
+                       class="form-control"
+                       id="num-of-payments"
+                       disabled />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <h5><span class="input-group-text">Interval</span></h5>
+                </div>
+                <input type="text"
+                       class="form-control"
+                       id="payment-schedule"
+                       disabled />
+            </div>
+        </div>
+    </div>
+
+
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script src="script1.js"></script>
+
+</body>
+</html>
